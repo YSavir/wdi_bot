@@ -10,46 +10,26 @@
 # modification to script...
 moment = require('moment');
 
-is_good_time = () ->
-  # returns true if the time isn't between 9am and 5pm on a weekday.
-  current_hour = moment().hour() - 4
-  current_minute = moment().minute()
-  is_weekend = () -> moment().day() == 0 or moment().day() == 7
-  if is_weekend() or current_hour < 9 or current_hour >= 17
-    return true
-  else
-    return false
-
 module.exports = (robot) ->
   robot.respond /(image|img)( me)? (.*)/i, (msg) ->
-    # check current time
-    unless is_good_time()
-      msg.send "Sorry. Perhaps you should be paying attention to class?"
-    else
-      imageMe msg, msg.match[3], (url) ->
-        msg.send url
-      # msg.send "#{moment().day()} and #{moment().hour()} and #{moment().minute()}"
+    imageMe msg, msg.match[3], (url) ->
+      msg.send url
+    # msg.send "#{moment().day()} and #{moment().hour()} and #{moment().minute()}"
 
   robot.respond /animate( me)? (.*)/i, (msg) ->
-    unless is_good_time()
-      msg.send "Sorry. Perhaps you should be paying attention to class?"
-    else
-      imageMe msg, msg.match[2], true, (url) ->
-        msg.send url
+    imageMe msg, msg.match[2], true, (url) ->
+      msg.send url
 
   robot.respond /(?:mo?u)?sta(?:s|c)he?(?: me)? (.*)/i, (msg) ->
-    unless is_good_time()
-      msg.send "Sorry. Perhaps you should be paying attention to class?"
-    else
-      type = Math.floor(Math.random() * 3)
-      mustachify = "http://mustachify.me/#{type}?src="
-      imagery = msg.match[1]
+    type = Math.floor(Math.random() * 3)
+    mustachify = "http://mustachify.me/#{type}?src="
+    imagery = msg.match[1]
 
-      if imagery.match /^https?:\/\//i
-        msg.send "#{mustachify}#{imagery}"
-      else
-        imageMe msg, imagery, false, true, (url) ->
-          msg.send "#{mustachify}#{url}"
+    if imagery.match /^https?:\/\//i
+      msg.send "#{mustachify}#{imagery}"
+    else
+      imageMe msg, imagery, false, true, (url) ->
+        msg.send "#{mustachify}#{url}"
 
 imageMe = (msg, query, animated, faces, cb) ->
   cb = animated if typeof animated == 'function'
