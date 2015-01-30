@@ -71,7 +71,7 @@ module.exports = (robot) ->
       robot.brain.data.instructorQueue = []
       msg.reply "cleared the queue"
     else
-      msg.reply "Sorry, you aren't allowed to do that"
+      msg.reply msg.message.user.mention_name
 
   robot.respond /q(ueue)?[ .]length/i, (msg) ->
     _.tap robot.brain.data.instructorQueue.length, (length) ->
