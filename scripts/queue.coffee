@@ -1,6 +1,6 @@
 util   = require 'util'
 _      = require 'underscore'
-moment = require 'moment'
+moment = require 'moment-timezone'
 tfmt   = (time) -> moment(time).format 'MMM Do, h:mm:ss a'
 
 module.exports = (robot) ->
@@ -10,7 +10,7 @@ module.exports = (robot) ->
   queueStudent = (name, reason) ->
     robot.brain.data.instructorQueue.push
       name: name
-      queuedAt: new Date()
+      queuedAt: moment(new Date()).tz('America/New_York')._d
       reason: reason
 
   stringifyQueue = ->
